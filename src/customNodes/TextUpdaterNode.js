@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Handle } from "react-flow-renderer";
+import { useState } from "react";
+import { Handle, Position } from "reactflow";
 
-const CsvNode = ({ data }) => {
+function TextUpdaterNode({ data, isConnectable }) {
   const [csvData, setCsvData] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleFileChange = (event) => {
+  const onChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       if (file.type === "text/csv") {
@@ -41,17 +41,16 @@ const CsvNode = ({ data }) => {
   };
 
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        padding: "10px",
-        borderRadius: "5px",
-        background: "#f9f9f9",
-      }}
-    >
-      <Handle type="target" position="top" style={{ background: "#555" }} />
+    <div className="text-updater-node">
       <div>
-        <input type="file" onChange={handleFileChange} />
+        <label htmlFor="text">File: </label>
+        <input
+          id="text"
+          name="text"
+          onChange={onChange}
+          className="nodrag"
+          type="file"
+        />
         {error && <p style={{ color: "red" }}>{error}</p>}
         {csvData && (
           <div>
@@ -60,9 +59,13 @@ const CsvNode = ({ data }) => {
           </div>
         )}
       </div>
-      <Handle type="source" position="bottom" style={{ background: "#555" }} />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+      />
     </div>
   );
-};
+}
 
-export default CsvNode;
+export default TextUpdaterNode;
