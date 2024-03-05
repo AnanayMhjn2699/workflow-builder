@@ -7,7 +7,7 @@ const csvDataSlice = createSlice({
   },
   reducers: {
     addItem: (state, action) => {
-      state.items.push(action.payload);
+      state.items = action.payload;
     },
   },
 });
