@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Handle, Position } from "reactflow";
+import { addItem } from "../utils/csvDataSlice";
 
 function TextUpdaterNode({ data, isConnectable }) {
-  const [csvData, setCsvData] = useState(null);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   const onChange = (event) => {
     const file = event.target.files[0];
@@ -13,7 +15,7 @@ function TextUpdaterNode({ data, isConnectable }) {
         reader.readAsText(file);
         reader.onload = () => {
           const parsedData = parseCsv(reader.result);
-          setCsvData(parsedData);
+          dispatch(addItem(parsedData));
           setError(null);
         };
         reader.onerror = () => {
@@ -52,12 +54,6 @@ function TextUpdaterNode({ data, isConnectable }) {
           type="file"
         />
         {error && <p style={{ color: "red" }}>{error}</p>}
-        {csvData && (
-          <div>
-            <h3>CSV Data:</h3>
-            <pre>{JSON.stringify(csvData, null, 2)}</pre>
-          </div>
-        )}
       </div>
       <Handle
         type="source"
